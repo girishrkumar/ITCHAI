@@ -1166,7 +1166,7 @@
   <div class="modal">
     <span class="modal-icon">✅</span>
     <div class="modal-title">Order Placed!</div>
-    <p class="modal-text">Thank you! Your order has been received. We'll call you within 2 hours to confirm delivery details.</p>
+    <p class="modal-text">Thank you! Your order has been received and saved. We'll call you within 2 hours to confirm delivery.</p><p style="font-family:DM Mono,monospace;font-size:0.72rem;opacity:0.5;margin-bottom:24px;">Ref: <span id="paymentId">—</span></p>
     <button class="modal-close" onclick="closeModal()">Got it!</button>
   </div>
 </div>
@@ -1218,28 +1218,138 @@
     document.getElementById('sumTotal').textContent = '₹' + total.toLocaleString('en-IN');
   }
 
-  function placeOrder() {
-    const name = document.getElementById('buyerName').value.trim();
-    const phone = document.getElementById('phone').value.trim();
+  // ── Supabase config ──────────────────────────────────────
+  const SUPABASE_URL  = 'https://aysahhrvpoitxxvikjxn.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5c2FoaHJ2cG9pdHh4dmlranhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNTM1NTQsImV4cCI6MjA5NTYyOTU1NH0.OSkqFmnN21sAZq6d6M5jUjf9r-GNBJJqloZM4eTy4nk';
+
+  async function saveOrderToSupabase(orderData) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${SUPABASE_ANON}`,
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(orderData)
+    });
+    if (!res.ok) throw new Error('Supabase save failed');
+    return await res.json();
+  }
+
+  // ── Razorpay payment ─────────────────────────────────────
+  function launchRazorpay(orderData, totalAmount) {
+    const options = {
+      key: 'rzp_test_SvDrs5x85mR7Yh',
+      amount: totalAmount * 100, // paise
+      currency: 'INR',
+      name: 'IT_Chaiwala',
+      description: `Chai Pati Order — ${orderData.pack_size} x ${orderData.quantity}`,
+      image: '',
+      prefill: {
+        name: orderData.buyer_name,
+        contact: orderData.phone
+      },
+      theme: { color: '#D4A017' },
+      handler: async function(response) {
+        // Payment success — save to Supabase
+        orderData.payment_method = 'razorpay';
+        orderData.status = 'paid';
+        orderData.razorpay_payment_id = response.razorpay_payment_id;
+        try {
+          await saveOrderToSupabase(orderData);
+        } catch(e) {
+          console.error('DB save error:', e);
+        }
+        document.getElementById('successModal').classList.add('active');
+        document.getElementById('paymentId').textContent = response.razorpay_payment_id;
+      },
+      modal: {
+        ondismiss: function() {
+          setSubmitLoading(false);
+        }
+      }
+    };
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', function(resp) {
+      alert('Payment failed: ' + resp.error.description);
+      setSubmitLoading(false);
+    });
+    rzp.open();
+  }
+
+  function setSubmitLoading(loading) {
+    const btn = document.querySelector('.submit-btn');
+    btn.disabled = loading;
+    btn.textContent = loading ? 'Processing...' : 'Confirm & Place Order →';
+  }
+
+  async function placeOrder() {
+    const name    = document.getElementById('buyerName').value.trim();
+    const phone   = document.getElementById('phone').value.trim();
     const address = document.getElementById('address').value.trim();
+    const shopName = document.getElementById('shopName').value.trim();
+    const city    = document.getElementById('city').value.trim();
+    const payment = document.getElementById('payment').value;
 
     if (!name || !phone || !address) {
       alert('Please fill in your name, phone number, and delivery address.');
       return;
     }
 
-    document.getElementById('successModal').classList.add('active');
+    // Get order values
+    const select     = document.getElementById('packSize');
+    const qty        = parseInt(document.getElementById('quantity').value) || 1;
+    const packKg     = parseInt(select.options[select.selectedIndex].value);
+    const pricePerKg = parseInt(select.options[select.selectedIndex].dataset.price);
+    const totalKg    = packKg * qty;
+    const subtotal   = totalKg * pricePerKg;
+    const delivery   = subtotal >= 2000 ? 0 : 80;
+    const total      = subtotal + delivery;
+
+    const orderData = {
+      buyer_name:      name,
+      shop_name:       shopName,
+      phone:           phone,
+      city:            city,
+      address:         address,
+      pack_size:       packKg + 'kg',
+      quantity:        qty,
+      total_weight:    totalKg + 'kg',
+      rate_per_kg:     pricePerKg,
+      delivery_charge: delivery,
+      total_amount:    total,
+      payment_method:  payment,
+      status:          'pending'
+    };
+
+    setSubmitLoading(true);
+
+    if (payment === 'upi' || payment === 'bank') {
+      // Pay online via Razorpay
+      launchRazorpay(orderData, total);
+    } else {
+      // Cash on Delivery — save directly to Supabase
+      try {
+        await saveOrderToSupabase(orderData);
+        document.getElementById('paymentId').textContent = 'COD — Pay on delivery';
+        document.getElementById('successModal').classList.add('active');
+      } catch(e) {
+        alert('Could not save order. Please try again.');
+      }
+      setSubmitLoading(false);
+    }
   }
 
   function closeModal() {
     document.getElementById('successModal').classList.remove('active');
-    // Reset form
     document.getElementById('buyerName').value = '';
-    document.getElementById('shopName').value = '';
-    document.getElementById('phone').value = '';
-    document.getElementById('city').value = '';
-    document.getElementById('address').value = '';
-    document.getElementById('quantity').value = 2;
+    document.getElementById('shopName').value  = '';
+    document.getElementById('phone').value     = '';
+    document.getElementById('city').value      = '';
+    document.getElementById('address').value   = '';
+    document.getElementById('quantity').value  = 2;
+    setSubmitLoading(false);
     updateSummary();
   }
 
@@ -1250,5 +1360,8 @@
   // Init
   updateSummary();
 </script>
+
+<!-- Razorpay SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
 </html>
