@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT_Chaiwala — Premium Chai Pati Supplier</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EDD6;
+    --deep-brown: #1A0A00;
+    --chai: #8B4513;
+    --spice: #C0392B;
+    --gold: #D4A017;
+    --amber: #E67E22;
+    --steam: rgba(245, 237, 214, 0.08);
+    --card-bg: #2A1400;
+    --border: rgba(212, 160, 23, 0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--deep-brown);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background: linear-gradient(to bottom, rgba(26,10,0,0.95), transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--gold);
+  }
+
+  .nav-logo span {
+    color: var(--cream);
+    font-style: italic;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    transition: opacity 0.2s, color 0.2s;
+  }
+
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold);
+    color: var(--deep-brown) !important;
+    padding: 10px 24px !important;
+    border-radius: 2px;
+    font-weight: 600 !important;
+    opacity: 1 !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--amber) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 60px 80px;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 70% 50%, rgba(139,69,19,0.35) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(212,160,23,0.12) 0%, transparent 60%),
+      var(--deep-brown);
+  }
+
+  /* Steam animation */
+  .steam-container {
+    position: absolute;
+    right: 12%;
+    top: 15%;
+    width: 300px;
+    height: 500px;
+    pointer-events: none;
+  }
+
+  .steam-line {
+    position: absolute;
+    bottom: 0;
+    width: 3px;
+    border-radius: 50px;
+    background: linear-gradient(to top, rgba(245,237,214,0.6), transparent);
+    animation: steam-rise 3s ease-in infinite;
+    transform-origin: bottom center;
+  }
+
+  .steam-line:nth-child(1) { left: 40%; height: 120px; animation-delay: 0s; }
+  .steam-line:nth-child(2) { left: 50%; height: 160px; animation-delay: 0.8s; }
+  .steam-line:nth-child(3) { left: 60%; height: 100px; animation-delay: 1.6s; }
+
+  @keyframes steam-rise {
+    0% { opacity: 0; transform: translateY(0) scaleX(1); }
+    30% { opacity: 0.7; }
+    100% { opacity: 0; transform: translateY(-200px) scaleX(3); }
+  }
+
+  .chai-cup-svg {
+    position: absolute;
+    right: 8%;
+    bottom: 10%;
+    width: 280px;
+    opacity: 0.15;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 620px;
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--border);
+    display: inline-block;
+    padding: 6px 14px;
+    margin-bottom: 28px;
+    animation: fade-up 0.8s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.2rem, 6vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    animation: fade-up 0.8s 0.15s ease both;
+  }
+
+  .hero-title .accent { color: var(--gold); }
+  .hero-title .italic { font-style: italic; color: var(--amber); }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    opacity: 0.7;
+    max-width: 480px;
+    margin-bottom: 44px;
+    animation: fade-up 0.8s 0.3s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    animation: fade-up 0.8s 0.45s ease both;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--deep-brown);
+    border: none;
+    padding: 16px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: var(--amber); transform: translateY(-2px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid var(--border);
+    padding: 16px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color 0.2s, color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--card-bg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 60px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    text-align: center;
+  }
+
+  .stat-item {}
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  /* SECTION COMMONS */
+  section { padding: 100px 60px; }
+
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    opacity: 0.6;
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 60px;
+  }
+
+  /* PRODUCTS */
+  .products { background: #150700; }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .product-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    cursor: pointer;
+  }
+
+  .product-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--gold);
+  }
+
+  .product-thumb {
+    height: 180px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .product-thumb-1 { background: linear-gradient(135deg, #3D1A00, #6B2F00); }
+  .product-thumb-2 { background: linear-gradient(135deg, #2A1000, #5C2500); }
+  .product-thumb-3 { background: linear-gradient(135deg, #1F0D00, #4A1E00); }
+  .product-thumb-4 { background: linear-gradient(135deg, #150700, #3D1500); }
+
+  .product-weight {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: rgba(212,160,23,0.3);
+    line-height: 1;
+  }
+
+  .product-weight span {
+    font-size: 1.2rem;
+    font-weight: 400;
+    vertical-align: super;
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--spice);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  .product-body { padding: 20px; }
+
+  .product-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .product-desc {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .product-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.3rem;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .product-price .per {
+    font-size: 0.72rem;
+    opacity: 0.6;
+    font-family: 'DM Sans', sans-serif;
+    vertical-align: middle;
+  }
+
+  .add-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--cream);
+    padding: 11px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .add-btn:hover {
+    background: var(--gold);
+    color: var(--deep-brown);
+    border-color: var(--gold);
+  }
+
+  /* ORDER FORM */
+  .order-section {
+    background: var(--deep-brown);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .order-section::before {
+    content: '';
+    position: absolute;
+    right: -200px;
+    top: -200px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,69,19,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .order-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .order-form {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 40px;
+  }
+
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 8px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(245,237,214,0.04);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 12px 16px;
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--gold);
+  }
+
+  .form-group select option { background: var(--card-bg); }
+
+  .form-group textarea { resize: vertical; min-height: 90px; }
+
+  .qty-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .order-summary {
+    background: rgba(212,160,23,0.07);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    padding: 6px 0;
+    opacity: 0.7;
+  }
+
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--gold);
+    color: var(--deep-brown);
+    border: none;
+    padding: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .submit-btn:hover { background: var(--amber); }
+  .submit-btn:active { transform: scale(0.99); }
+
+  /* Why Us */
+  .why-us { background: #150700; }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 60px;
+  }
+
+  .why-card {
+    padding: 36px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .why-card:hover { border-color: var(--gold); }
+
+  .why-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(212,160,23,0.04), transparent);
+    pointer-events: none;
+  }
+
+  .why-icon {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .why-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .why-text { opacity: 0.6; font-size: 0.9rem; line-height: 1.7; }
+
+  /* TESTIMONIALS */
+  .testimonials { background: var(--deep-brown); }
+
+  .test-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .test-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+  }
+
+  .test-stars { color: var(--gold); font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
+
+  .test-text {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    opacity: 0.75;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .test-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .test-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--deep-brown);
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .test-name { font-weight: 600; font-size: 0.9rem; }
+  .test-role { font-size: 0.75rem; opacity: 0.5; }
+
+  /* CONTACT */
+  .contact-strip {
+    background: var(--card-bg);
+    border-top: 1px solid var(--border);
+    padding: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .contact-item { display: flex; align-items: center; gap: 16px; }
+
+  .contact-icon {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .contact-label { font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.5; margin-bottom: 4px; }
+  .contact-value { font-size: 0.95rem; font-weight: 500; }
+
+  /* FOOTER */
+  footer {
+    background: #0F0500;
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--gold);
+  }
+
+  .footer-copy {
+    font-size: 0.78rem;
+    opacity: 0.35;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ORDER SUCCESS MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,10,0,0.92);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--card-bg);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 60px 48px;
+    text-align: center;
+    max-width: 440px;
+    width: 90%;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.active .modal { transform: translateY(0); }
+
+  .modal-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .modal-text { opacity: 0.65; font-size: 0.95rem; line-height: 1.6; margin-bottom: 28px; }
+
+  .modal-close {
+    background: var(--gold);
+    color: var(--deep-brown);
+    border: none;
+    padding: 13px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 2px;
+    font-size: 0.95rem;
+  }
+
+  /* CART BADGE */
+  .cart-btn {
+    position: relative;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--cream);
+    padding: 10px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+
+  .cart-btn:hover { border-color: var(--gold); }
+
+  .cart-count {
+    background: var(--spice);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 0 60px;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 70px 24px; }
+    .hero { padding: 100px 24px 60px; }
+    .stats-bar { padding: 24px; grid-template-columns: repeat(2, 1fr); }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .order-grid { grid-template-columns: 1fr; gap: 40px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .test-grid { grid-template-columns: 1fr; }
+    .contact-strip { padding: 40px 24px; flex-direction: column; align-items: flex-start; }
+    footer { padding: 28px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    .divider { margin: 0 24px; }
+    .steam-container, .chai-cup-svg { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">IT_<span>Chaiwala</span></div>
+  <ul class="nav-links">
+    <li><a href="#products">Products</a></li>
+    <li><a href="#order">Order Now</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#order" class="nav-cta">Place Bulk Order</a></li>
+  </ul>
+  <button class="cart-btn" onclick="scrollToOrder()">
+    🛒 Cart <span class="cart-count" id="cartCount">0</span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="steam-container">
+    <div class="steam-line"></div>
+    <div class="steam-line"></div>
+    <div class="steam-line"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-tag">B2B Wholesale Supplier · Since 2010</div>
+    <h1 class="hero-title">
+      The <span class="accent">Perfect</span><br>
+      <span class="italic">Chai Pati</span><br>
+      Delivered Fresh
+    </h1>
+    <p class="hero-sub">
+      Premium quality chai pati supplied directly to retail shops, canteens, and bulk buyers. Consistent flavour, reliable delivery, competitive bulk pricing.
+    </p>
+    <div class="hero-actions">
+      <a href="#order" class="btn-primary">Order Now</a>
+      <a href="#products" class="btn-ghost">View Products</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number">500+</div>
+    <div class="stat-label">Retail Partners</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">15+</div>
+    <div class="stat-label">Years in Business</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">50T</div>
+    <div class="stat-label">Monthly Supply</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">98%</div>
+    <div class="stat-label">Reorder Rate</div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <span class="section-tag">Our Products</span>
+  <h2 class="section-title">Choose Your Pack Size</h2>
+  <p class="section-sub">All packs contain the same premium blend — stronger brew, richer colour, consistent quality across every batch.</p>
+
+  <div class="products-grid">
+    <div class="product-card" onclick="addToCart('1kg', 180)">
+      <div class="product-thumb product-thumb-1">
+        <div class="product-weight">1<span>kg</span></div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Starter Pack — 1kg</div>
+        <div class="product-desc">Ideal for small canteens & trial orders. Fresh sealed pouch.</div>
+        <div class="product-price">₹180 <span class="per">/ kg</span></div>
+        <button class="add-btn">Add to Order</button>
+      </div>
+    </div>
+
+    <div class="product-card" onclick="addToCart('5kg', 165)">
+      <div class="product-thumb product-thumb-2">
+        <div class="product-weight">5<span>kg</span></div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Business Pack — 5kg</div>
+        <div class="product-desc">Best for growing retail shops. Vacuum-sealed for freshness.</div>
+        <div class="product-price">₹165 <span class="per">/ kg</span></div>
+        <button class="add-btn">Add to Order</button>
+      </div>
+    </div>
+
+    <div class="product-card" onclick="addToCart('10kg', 150)">
+      <div class="product-thumb product-thumb-3">
+        <div class="product-badge">Popular</div>
+        <div class="product-weight">10<span>kg</span></div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bulk Pack — 10kg</div>
+        <div class="product-desc">Most popular size. Perfect for high-volume canteens & shops.</div>
+        <div class="product-price">₹150 <span class="per">/ kg</span></div>
+        <button class="add-btn">Add to Order</button>
+      </div>
+    </div>
+
+    <div class="product-card" onclick="addToCart('25kg', 135)">
+      <div class="product-thumb product-thumb-4">
+        <div class="product-badge">Best Value</div>
+        <div class="product-weight">25<span>kg</span></div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Wholesale — 25kg</div>
+        <div class="product-desc">Lowest price per kg. For distributors & large establishments.</div>
+        <div class="product-price">₹135 <span class="per">/ kg</span></div>
+        <button class="add-btn">Add to Order</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ORDER FORM -->
+<section class="order-section" id="order">
+  <div class="order-grid">
+    <div>
+      <span class="section-tag">Place an Order</span>
+      <h2 class="section-title">Ready to Stock Up?</h2>
+      <p class="section-sub">Fill in your details and we'll confirm your order within 2 hours. Delivery within 24–48 hrs depending on your location.</p>
+
+      <div style="margin-top: 32px;">
+        <div style="display:flex; gap:16px; align-items:flex-start; margin-bottom:24px;">
+          <div class="contact-icon">📦</div>
+          <div>
+            <div class="contact-label">Minimum Order</div>
+            <div style="font-size:0.95rem; font-weight:500;">1kg — No minimum for repeat customers</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:16px; align-items:flex-start; margin-bottom:24px;">
+          <div class="contact-icon">🚚</div>
+          <div>
+            <div class="contact-label">Delivery</div>
+            <div style="font-size:0.95rem; font-weight:500;">Free delivery on orders above ₹2000</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:16px; align-items:flex-start;">
+          <div class="contact-icon">💳</div>
+          <div>
+            <div class="contact-label">Payment</div>
+            <div style="font-size:0.95rem; font-weight:500;">UPI · Bank Transfer · Cash on Delivery</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-form">
+      <div class="form-title">🍵 New Order</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="buyerName" placeholder="Ramesh Kumar" />
+        </div>
+        <div class="form-group">
+          <label>Shop / Canteen Name</label>
+          <input type="text" id="shopName" placeholder="Sharma General Store" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="+91 98765 43210" />
+        </div>
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" id="city" placeholder="Mumbai" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Delivery Address</label>
+        <textarea id="address" placeholder="Shop no., street, area, pincode..."></textarea>
+      </div>
+
+      <div class="qty-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label>Pack Size</label>
+          <select id="packSize" onchange="updateSummary()">
+            <option value="1" data-price="180">1kg — ₹180/kg</option>
+            <option value="5" data-price="165">5kg — ₹165/kg</option>
+            <option value="10" data-price="150" selected>10kg — ₹150/kg</option>
+            <option value="25" data-price="135">25kg — ₹135/kg</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label>Quantity (packs)</label>
+          <input type="number" id="quantity" value="2" min="1" max="999" oninput="updateSummary()" />
+        </div>
+      </div>
+
+      <div class="order-summary" id="orderSummary" style="margin-top:20px;">
+        <div class="summary-row"><span>Pack Size</span><span id="sumPack">10kg</span></div>
+        <div class="summary-row"><span>Packs Ordered</span><span id="sumQty">2</span></div>
+        <div class="summary-row"><span>Total Weight</span><span id="sumWeight">20kg</span></div>
+        <div class="summary-row"><span>Rate</span><span id="sumRate">₹150/kg</span></div>
+        <div class="summary-row"><span>Delivery</span><span id="sumDelivery">Free</span></div>
+        <div class="summary-total"><span>Total</span><span id="sumTotal">₹3,000</span></div>
+      </div>
+
+      <div class="form-group">
+        <label>Payment Method</label>
+        <select id="payment">
+          <option value="upi">UPI</option>
+          <option value="bank">Bank Transfer</option>
+          <option value="cod">Cash on Delivery</option>
+        </select>
+      </div>
+
+      <button class="submit-btn" onclick="placeOrder()">Confirm & Place Order →</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHY US -->
+<section class="why-us" id="why">
+  <span class="section-tag">Why IT_Chaiwala</span>
+  <h2 class="section-title">Built for Businesses<br>That Run on Chai</h2>
+
+  <div class="why-grid">
+    <div class="why-card">
+      <span class="why-icon">🌿</span>
+      <div class="why-title">Premium Source</div>
+      <p class="why-text">We source directly from trusted gardens, ensuring consistent quality, flavour, and colour in every batch we supply.</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">🚚</span>
+      <div class="why-title">Reliable Delivery</div>
+      <p class="why-text">On-time delivery, every time. We know your canteen can't run out of chai — so we make sure it never does.</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">💰</span>
+      <div class="why-title">Bulk Pricing</div>
+      <p class="why-text">The more you order, the better your rate. Transparent pricing with no hidden charges — just honest business.</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">📦</span>
+      <div class="why-title">Fresh Packaging</div>
+      <p class="why-text">Vacuum-sealed, moisture-proof packs that preserve freshness from our warehouse to your shop.</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">🤝</span>
+      <div class="why-title">Long-term Partners</div>
+      <p class="why-text">We've been supplying to the same shops for 10+ years. Trust, consistency, and personal service — that's our promise.</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">📱</span>
+      <div class="why-title">Easy Reordering</div>
+      <p class="why-text">Order online or on WhatsApp in minutes. No lengthy process — just place your order and we'll handle the rest.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <span class="section-tag">What Our Partners Say</span>
+  <h2 class="section-title">Trusted by Shops<br>Across the City</h2>
+  <br>
+  <div class="test-grid">
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"Been ordering from IT_Chaiwala for 6 years. The quality never drops and delivery is always on time. My customers always compliment the chai."</p>
+      <div class="test-author">
+        <div class="test-avatar">RS</div>
+        <div>
+          <div class="test-name">Ramesh Sharma</div>
+          <div class="test-role">General Store Owner, Pune</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"Our factory canteen serves 300 workers daily. IT_Chaiwala's 25kg packs are the best value we've found. Switched 3 years ago, never going back."</p>
+      <div class="test-author">
+        <div class="test-avatar">MP</div>
+        <div>
+          <div class="test-name">Manjit Patil</div>
+          <div class="test-role">Canteen Manager, Nashik</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"Tried many suppliers but the colour and taste here is simply better. Plus ordering online is so easy now. No more calls and confusion."</p>
+      <div class="test-author">
+        <div class="test-avatar">AK</div>
+        <div>
+          <div class="test-name">Anil Kadam</div>
+          <div class="test-role">Retail Shop, Mumbai</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="contact-strip" id="contact">
+  <div class="contact-item">
+    <div class="contact-icon">📞</div>
+    <div>
+      <div class="contact-label">Call / WhatsApp</div>
+      <div class="contact-value">+91 98765 43210</div>
+    </div>
+  </div>
+  <div class="contact-item">
+    <div class="contact-icon">✉️</div>
+    <div>
+      <div class="contact-label">Email</div>
+      <div class="contact-value">orders@itchaiwala.in</div>
+    </div>
+  </div>
+  <div class="contact-item">
+    <div class="contact-icon">🕐</div>
+    <div>
+      <div class="contact-label">Business Hours</div>
+      <div class="contact-value">Mon–Sat, 8 AM – 7 PM</div>
+    </div>
+  </div>
+  <a href="#order" class="btn-primary">Place Bulk Order →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">IT_Chaiwala</div>
+  <div class="footer-copy">© 2024 IT_Chaiwala. All rights reserved.</div>
+</footer>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <span class="modal-icon">✅</span>
+    <div class="modal-title">Order Placed!</div>
+    <p class="modal-text">Thank you! Your order has been received. We'll call you within 2 hours to confirm delivery details.</p>
+    <button class="modal-close" onclick="closeModal()">Got it!</button>
+  </div>
+</div>
+
+<script>
+  let cart = 0;
+
+  function addToCart(size, price) {
+    cart++;
+    document.getElementById('cartCount').textContent = cart;
+    // Pre-fill the order form
+    const select = document.getElementById('packSize');
+    for (let i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === size.replace('kg','')) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+    updateSummary();
+    // Flash notification
+    const btn = event.target.closest('.product-card').querySelector('.add-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Added!';
+    btn.style.background = 'var(--gold)';
+    btn.style.color = 'var(--deep-brown)';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 1500);
+  }
+
+  function updateSummary() {
+    const select = document.getElementById('packSize');
+    const qty = parseInt(document.getElementById('quantity').value) || 1;
+    const selectedOption = select.options[select.selectedIndex];
+    const packKg = parseInt(selectedOption.value);
+    const pricePerKg = parseInt(selectedOption.dataset.price);
+    const totalKg = packKg * qty;
+    const subtotal = totalKg * pricePerKg;
+    const delivery = subtotal >= 2000 ? 0 : 80;
+    const total = subtotal + delivery;
+
+    document.getElementById('sumPack').textContent = packKg + 'kg';
+    document.getElementById('sumQty').textContent = qty;
+    document.getElementById('sumWeight').textContent = totalKg + 'kg';
+    document.getElementById('sumRate').textContent = '₹' + pricePerKg + '/kg';
+    document.getElementById('sumDelivery').textContent = delivery === 0 ? 'Free' : '₹' + delivery;
+    document.getElementById('sumTotal').textContent = '₹' + total.toLocaleString('en-IN');
+  }
+
+  function placeOrder() {
+    const name = document.getElementById('buyerName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
+
+    if (!name || !phone || !address) {
+      alert('Please fill in your name, phone number, and delivery address.');
+      return;
+    }
+
+    document.getElementById('successModal').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('successModal').classList.remove('active');
+    // Reset form
+    document.getElementById('buyerName').value = '';
+    document.getElementById('shopName').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('city').value = '';
+    document.getElementById('address').value = '';
+    document.getElementById('quantity').value = 2;
+    updateSummary();
+  }
+
+  function scrollToOrder() {
+    document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Init
+  updateSummary();
+</script>
+</body>
+</html>
